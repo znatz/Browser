@@ -1,0 +1,15 @@
+﻿[Output]
+Coordinates=63,10,53,58
+
+[Input]
+Coordinates=10,10,43,58
+
+[Err]
+Coordinates=176,10,40,58
+
+[Sb]
+Coordinates=126,10,40,58
+
+[RqstHdr]
+Coordinates=10,78,62,58
+

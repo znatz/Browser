@@ -1,0 +1,68 @@
+object Fm: TFm
+  Left = 0
+  Top = 0
+  BorderStyle = bsSizeToolWin
+  Caption = #33258#28982#12398#12502#12521#12454#12470
+  ClientHeight = 594
+  ClientWidth = 809
+  FormFactor.Width = 1366
+  FormFactor.Height = 768
+  FormFactor.Devices = [dkDesktop]
+  object Input: TEdit
+    DisableFocusEffect = False
+    KeyboardType = vktDefault
+    Password = False
+    Position.X = 8.000000000000000000
+    Position.Y = 8.000000000000000000
+    Width = 217.000000000000000000
+    Height = 22.000000000000000000
+  end
+  object Sb: TButton
+    DisableFocusEffect = False
+    Height = 22.000000000000000000
+    Position.X = 232.000000000000000000
+    Position.Y = 8.000000000000000000
+    Text = 'Submit'
+    Width = 80.000000000000000000
+    OnClick = SbClick
+  end
+  object Err: TMemo
+    Touch.InteractiveGestures = [igPan]
+    Height = 193.000000000000000000
+    Position.X = 368.000000000000000000
+    Position.Y = 272.000000000000000000
+    UseSmallScrollBars = True
+    Width = 249.000000000000000000
+    DisableFocusEffect = False
+    KeyboardType = vktDefault
+  end
+  object Output: TMemo
+    Touch.InteractiveGestures = [igPan]
+    Height = 425.000000000000000000
+    Position.X = 8.000000000000000000
+    Position.Y = 40.000000000000000000
+    UseSmallScrollBars = True
+    Width = 345.000000000000000000
+    DisableFocusEffect = False
+    KeyboardType = vktDefault
+  end
+  object RqstHdr: TMemo
+    Touch.InteractiveGestures = [igPan]
+    Height = 217.000000000000000000
+    Position.X = 368.000000000000000000
+    Position.Y = 40.000000000000000000
+    UseSmallScrollBars = True
+    Width = 249.000000000000000000
+    DisableFocusEffect = False
+    KeyboardType = vktDefault
+  end
+  object Button1: TButton
+    DisableFocusEffect = False
+    Height = 22.000000000000000000
+    Position.X = 688.000000000000000000
+    Position.Y = 328.000000000000000000
+    Text = 'Button1'
+    Width = 80.000000000000000000
+    OnClick = Button1Click
+  end
+end
