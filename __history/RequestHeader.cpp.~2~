@@ -9,8 +9,7 @@ if (val=="")
 }
 else
 {
-	UStrReqHdr = val;
+UStrReqHdr = val;
 }
 HdrToSent = AnsiString(UStrReqHdr).c_str();
-
 }

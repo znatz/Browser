@@ -116,6 +116,10 @@
             <DependentOn>RequestHeader.h</DependentOn>
             <BuildOrder>6</BuildOrder>
         </CppCompile>
+        <CppCompile Include="ResponseHeader.cpp">
+            <DependentOn>ResponseHeader.h</DependentOn>
+            <BuildOrder>6</BuildOrder>
+        </CppCompile>
         <CppCompile Include="Unit1.cpp">
             <Form>Fm</Form>
             <FormType>fmx</FormType>

@@ -5,7 +5,6 @@
 
 #include "Unit1.h"
 #include "RequestHeader.h"
-#include "ResponseHeader.h"
 //---------------------------------------------------------------------------
 #include <winsock2.h>
 #include <WS2tcpip.h>
@@ -26,6 +25,7 @@ TFileStream* FStream;
 
 bool ConnectIt();
 void Report(int, UnicodeString);
+const char* SetupReqHdr(UnicodeString);
 //---------------------------------------------------------------------------
 TFm *Fm;
 //---------------------------------------------------------------------------
@@ -59,7 +59,27 @@ void Report(int iR, UnicodeString ms)
 		Fm->Err->Text = Fm->Err->Text + ms + " " + IntToStr(iR) + ENDOFLINE;
 	}
 }
-
+//---------------------------------------------------------------------------
+const char* SetupReqHdr(UnicodeString ReqHdr)   // TODO : Make this a Class
+{
+/*
+    	// Setup request header
+    	const char* sendbuff;
+    	if (ReqHdr=="")
+    	{
+    		// If header is empty, the default is as follow.
+    		UnicodeString requst = "GET /Sample.bmp HTTP/1.1\r\nHost:localhost\r\nConnection: close\r\n\r\n";
+    		sendbuff = AnsiString(requst).c_str();  // The .c_str() method actually changes the memory.
+    	}
+    	else
+    	{
+    		sendbuff = AnsiString(ReqHdr).c_str();
+    	};
+    	return sendbuff;
+*/
+	RequestHeader rqth(ReqHdr);
+	return rqth.HdrToSent;
+}
 //---------------------------------------------------------------------------
 bool ConnectIt()
 {
@@ -90,8 +110,7 @@ bool ConnectIt()
 // Free up addrinfo
 	freeaddrinfo(result);
 // Send request header
-	RequestHeader RqHdr(Fm->RqstHdr->Text);
-	iResult = send(iSocket, RqHdr.HdrToSent, BUFFLEN,0);
+	iResult = send(iSocket, SetupReqHdr(Fm->RqstHdr->Text), BUFFLEN,0);
 	msg = "Bytes sent";
 	Report(iResult,msg);
 // Receive data
@@ -110,8 +129,9 @@ bool ConnectIt()
 
 				if (totalRecvBytes==iResult)
 				{
-					  ResponseHeader RspHdr(recvbuff);
-					  FStream->Write(&recvbuff[RspHdr.HdrLen],iResult-RspHdr.HdrLen);
+				// The counts of bytes is counted by finding \r\n\r\n
+					  int StartPos = UnicodeString(recvbuff).Pos(UnicodeString("\r\n\r\n"))+ 3;
+					  FStream->Write(&recvbuff[StartPos],iResult-StartPos);
 
 				}
 				else
