@@ -20,7 +20,7 @@ int  iResult;
 UnicodeString msg;
 bool ConnectIt();
 void Report(int, UnicodeString);
-UnicodeString filename = "myFile1.bmp";
+UnicodeString filename = "TempFile.bmp";
 TFileStream* FStream= new TFileStream(filename, fmCreate);
 //---------------------------------------------------------------------------
 TFm *Fm;
@@ -115,8 +115,19 @@ do
 		Report(iResult,msg);
 		Fm->Output->Text = Fm->Output->Text + UnicodeString(recvbuff).SubString(0,iResult);
 		totalRecvBytes += iResult;
-		// TODO have to remove the header!!
-		FStream->Write(recvbuff,iResult);
+
+			if (totalRecvBytes==iResult)
+			{
+			// The counts of bytes 274 of header needed to be calculated from other methods!
+				  int StartPos = UnicodeString(recvbuff).Pos(UnicodeString("\r\n\r\n"))+ 3;
+				  FStream->Write(&recvbuff[StartPos],iResult-StartPos);
+
+			}
+			else
+			{
+				FStream->Write(recvbuff,iResult);
+			}
+
 	}
 	else if (iResult==0)
 	{
@@ -144,7 +155,6 @@ Report(iResult,msg);
 closesocket(iSocket);
 WSACleanup();
 
-
 FStream->Free();
 
 return TRUE;
@@ -154,12 +164,15 @@ return TRUE;
 void __fastcall TFm::Button1Click(TObject *Sender)
 {
 
-TImage *TImg = new TImage(Fm);
-TImg->Parent = Fm;
-TImg->Name = "InputImg";
-TImg->Position->X = 100;
-TImg->Position->Y = 100;
-TImg->Bitmap->LoadFromFile(FStream->FileName);
+	// The following codes work!!!
+	TImage* Image2 = new TImage(Fm);
+	Image2->Parent = Fm;
+	Image2->Position->X=650;
+	Image2->Position->Y=200;
+	Image2->Bitmap->LoadFromFile(filename);
+	// TODO the filename has to be randomized
+
 }
+
 //---------------------------------------------------------------------------
 
