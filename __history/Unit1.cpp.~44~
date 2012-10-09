@@ -112,11 +112,7 @@ bool ConnectIt()
 				{
 					  ResponseHeader RspHdr(recvbuff);
 					  FStream->Write(&recvbuff[RspHdr.HdrLen],iResult-RspHdr.HdrLen);
-								  //--------------------------
-					    Report(RspHdr.HdrLen,"TotalBytes");
-						for (int i = 0; i < 20; i++) {
-							Report(RspHdr.Pos[i],"Pos");
-							}
+
 				}
 				else
 				{
@@ -149,10 +145,6 @@ bool ConnectIt()
 	closesocket(iSocket);
 	WSACleanup();
 	FStream->Free();
-
-
-
-//--------------------------
 
 return TRUE;
 }
