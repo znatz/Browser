@@ -24,7 +24,7 @@ TFileStream* FStream;
 
 bool ConnectIt();
 void Report(int, UnicodeString);
-const char* SetupReqHdr(UnicodeString);
+const char* SetupReqHdr();
 //---------------------------------------------------------------------------
 TFm *Fm;
 //---------------------------------------------------------------------------
@@ -59,19 +59,20 @@ void Report(int iR, UnicodeString ms)
 	}
 }
 //---------------------------------------------------------------------------
-const char* SetupReqHdr(UnicodeString ReqHdr)   // TODO : Make this a Class
+const char* SetupReqHdr()
 {
 	// Setup request header
 	const char* sendbuff;
-	if (ReqHdr=="")
+	if (Fm->RqstHdr->Text=="")
 	{
-		// If header is empty, the default is as follow.
-		UnicodeString requst = "GET /Sample.bmp HTTP/1.1\r\nHost:localhost\r\nConnection: close\r\n\r\n";
-		sendbuff = AnsiString(requst).c_str();  // The .c_str() method actually changes the memory.
+		UnicodeString requst = "GET /Sample.bmp HTTP/1.1\r\n" ;
+		requst = requst + "Host:" + Fm->Input->Text  + "\r\n";
+		requst = requst + "Connection: close\r\n\r\n";
+		sendbuff = AnsiString(requst).c_str();
 	}
 	else
 	{
-		sendbuff = AnsiString(ReqHdr).c_str();
+		sendbuff = AnsiString(Fm->RqstHdr->Text).c_str();
 	};
 	return sendbuff;
 }
@@ -105,7 +106,7 @@ bool ConnectIt()
 // Free up addrinfo
 	freeaddrinfo(result);
 // Send request header
-	iResult = send(iSocket, SetupReqHdr(Fm->RqstHdr->Text), BUFFLEN,0);
+	iResult = send(iSocket, SetupReqHdr(), BUFFLEN,0);
 	msg = "Bytes sent";
 	Report(iResult,msg);
 // Receive data
@@ -159,6 +160,7 @@ bool ConnectIt()
 	Report(iResult,msg);
 	closesocket(iSocket);
 	WSACleanup();
+
 	FStream->Free();
 
 return TRUE;
@@ -169,10 +171,8 @@ void __fastcall TFm::Button1Click(TObject *Sender)
 {
 	TImage* Image2 = new TImage(Fm);
 	Image2->Parent = Fm;
-	Image2->Width = 200;
-	Image2->Height= 200;
-	Image2->Position->X= 560;
-	Image2->Position->Y= Fm->Err->Position->Y;
+	Image2->Position->X=650;
+	Image2->Position->Y=400;
 	Image2->Bitmap->LoadFromFile(filename);
 }
 

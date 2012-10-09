@@ -1,9 +1,10 @@
 object Fm: TFm
   Left = 0
   Top = 0
-  Caption = 'Form1'
-  ClientHeight = 480
-  ClientWidth = 640
+  BorderStyle = bsSizeToolWin
+  Caption = #33258#28982#12398#12502#12521#12454#12470
+  ClientHeight = 629
+  ClientWidth = 809
   FormFactor.Width = 1366
   FormFactor.Height = 768
   FormFactor.Devices = [dkDesktop]
@@ -51,8 +52,17 @@ object Fm: TFm
     Position.X = 368.000000000000000000
     Position.Y = 40.000000000000000000
     UseSmallScrollBars = True
-    Width = 249.000000000000000000
+    Width = 417.000000000000000000
     DisableFocusEffect = False
     KeyboardType = vktDefault
+  end
+  object Button1: TButton
+    DisableFocusEffect = False
+    Height = 22.000000000000000000
+    Position.X = 328.000000000000000000
+    Position.Y = 8.000000000000000000
+    Text = 'Get Image'
+    Width = 80.000000000000000000
+    OnClick = Button1Click
   end
 end
