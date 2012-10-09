@@ -1,0 +1,7 @@
+#ifndef RequestHeaderH
+#define RequestHeaderH
+
+class RequestHeader {
+};
+
+#endif /* #ifndef RequestHeaderH */

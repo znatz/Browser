@@ -4,7 +4,6 @@
 #pragma hdrstop
 
 #include "Unit1.h"
-#include "RequestHeader.h"
 //---------------------------------------------------------------------------
 #include <winsock2.h>
 #include <WS2tcpip.h>
@@ -62,23 +61,19 @@ void Report(int iR, UnicodeString ms)
 //---------------------------------------------------------------------------
 const char* SetupReqHdr(UnicodeString ReqHdr)   // TODO : Make this a Class
 {
-/*
-    	// Setup request header
-    	const char* sendbuff;
-    	if (ReqHdr=="")
-    	{
-    		// If header is empty, the default is as follow.
-    		UnicodeString requst = "GET /Sample.bmp HTTP/1.1\r\nHost:localhost\r\nConnection: close\r\n\r\n";
-    		sendbuff = AnsiString(requst).c_str();  // The .c_str() method actually changes the memory.
-    	}
-    	else
-    	{
-    		sendbuff = AnsiString(ReqHdr).c_str();
-    	};
-    	return sendbuff;
-*/
-	RequestHeader rqth(ReqHdr);
-	return rqth.HdrToSent;
+	// Setup request header
+	const char* sendbuff;
+	if (ReqHdr=="")
+	{
+		// If header is empty, the default is as follow.
+		UnicodeString requst = "GET /Sample.bmp HTTP/1.1\r\nHost:localhost\r\nConnection: close\r\n\r\n";
+		sendbuff = AnsiString(requst).c_str();  // The .c_str() method actually changes the memory.
+	}
+	else
+	{
+		sendbuff = AnsiString(ReqHdr).c_str();
+	};
+	return sendbuff;
 }
 //---------------------------------------------------------------------------
 bool ConnectIt()

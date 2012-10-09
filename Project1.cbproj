@@ -112,6 +112,10 @@
         <PCHCompile Include="Project1PCH1.h">
             <BuildOrder>1</BuildOrder>
         </PCHCompile>
+        <CppCompile Include="RequestHeader.cpp">
+            <DependentOn>RequestHeader.h</DependentOn>
+            <BuildOrder>6</BuildOrder>
+        </CppCompile>
         <CppCompile Include="Unit1.cpp">
             <Form>Fm</Form>
             <FormType>fmx</FormType>
