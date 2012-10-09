@@ -11,15 +11,16 @@
 #include <FMX.Memo.hpp>
 #include <FMX.Types.hpp>
 #include <FMX.Objects.hpp>
+#include <Vcl.Graphics.hpp>
 //---------------------------------------------------------------------------
 class TFm : public TForm
 {
 __published:	// IDE-managed Components
 	TEdit *Input;
 	TButton *Sb;
-	TMemo *RqstHdr;
 	TMemo *Err;
 	TMemo *Output;
+	TMemo *RqstHdr;
 	TButton *Button1;
 
 

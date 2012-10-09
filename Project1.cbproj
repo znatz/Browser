@@ -44,7 +44,7 @@
         <IncludePath>..\..\..\Desktop\Browser\;$(IncludePath)</IncludePath>
         <DCC_Namespace>System;Xml;Data;Datasnap;Web;Soap;$(DCC_Namespace)</DCC_Namespace>
         <ProjectType>FmxGuiApplication</ProjectType>
-        <AllPackageLibs>rtl.lib;fmx.lib</AllPackageLibs>
+        <AllPackageLibs>rtl.lib;fmx.lib;vcl.lib</AllPackageLibs>
         <Multithreaded>true</Multithreaded>
         <_TCHARMapping>wchar_t</_TCHARMapping>
         <Icon_MainIcon>$(BDS)\bin\cbuilder_PROJECTICON.ico</Icon_MainIcon>
@@ -95,7 +95,7 @@
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
         <BCC_VCCompatibility>true</BCC_VCCompatibility>
-        <LinkPackageImports>rtl.bpi;fmx.bpi</LinkPackageImports>
+        <LinkPackageImports>rtl.bpi;fmx.bpi;vcl.bpi</LinkPackageImports>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <VerInfo_Locale>1033</VerInfo_Locale>
     </PropertyGroup>

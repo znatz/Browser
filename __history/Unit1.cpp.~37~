@@ -19,12 +19,10 @@
 //---------------------------------------------------------------------------
 int  iResult;
 UnicodeString msg;
-UnicodeString filename;
-TFileStream* FStream;
-
 bool ConnectIt();
 void Report(int, UnicodeString);
-const char* SetupReqHdr();
+UnicodeString filename;
+TFileStream* FStream;
 //---------------------------------------------------------------------------
 TFm *Fm;
 //---------------------------------------------------------------------------
@@ -40,10 +38,18 @@ void __fastcall TFm::SbClick(TObject *Sender)
 	UnicodeString str = Input->Text;
 
 	randomize();
-	filename = IntToStr(rand()) +".bmp";
+	filename = IntToStr(rand())+".bmp";
 	FStream= new TFileStream(filename, fmCreate);
 
+
 	ConnectIt();
+/*
+	TFm *Cosmos = new TFm(this);
+	Cosmos->ShowModal();
+
+	delete Cosmos;
+	Cosmos = NULL;
+*/
 }
 
 //---------------------------------------------------------------------------
@@ -57,24 +63,6 @@ void Report(int iR, UnicodeString ms)
 	{
 		Fm->Err->Text = Fm->Err->Text + ms + " " + IntToStr(iR) + ENDOFLINE;
 	}
-}
-//---------------------------------------------------------------------------
-const char* SetupReqHdr()
-{
-	// Setup request header
-	const char* sendbuff;
-	if (Fm->RqstHdr->Text=="")
-	{
-		UnicodeString requst = "GET /Sample.bmp HTTP/1.1\r\n" ;
-		requst = requst + "Host:" + Fm->Input->Text  + "\r\n";
-		requst = requst + "Connection: close\r\n\r\n";
-		sendbuff = AnsiString(requst).c_str();
-	}
-	else
-	{
-		sendbuff = AnsiString(Fm->RqstHdr->Text).c_str();
-	};
-	return sendbuff;
 }
 //---------------------------------------------------------------------------
 bool ConnectIt()
@@ -105,8 +93,21 @@ bool ConnectIt()
 	Report(iResult,msg);
 // Free up addrinfo
 	freeaddrinfo(result);
+// Setup request header
+	const char* sendbuff;
+	if (Fm->RqstHdr->Text=="")
+	{
+		UnicodeString requst = "GET /Sample.bmp HTTP/1.1\r\n" ;
+		requst = requst + "Host:" + Fm->Input->Text  + "\r\n";
+		requst = requst + "Connection: close\r\n\r\n";
+		sendbuff = AnsiString(requst).c_str();
+	}
+	else
+	{
+		sendbuff = AnsiString(Fm->RqstHdr->Text).c_str();
+	};
 // Send request header
-	iResult = send(iSocket, SetupReqHdr(), BUFFLEN,0);
+	iResult = send(iSocket, sendbuff, BUFFLEN,0);
 	msg = "Bytes sent";
 	Report(iResult,msg);
 // Receive data
