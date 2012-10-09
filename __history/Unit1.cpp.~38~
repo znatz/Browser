@@ -40,7 +40,7 @@ void __fastcall TFm::SbClick(TObject *Sender)
 	UnicodeString str = Input->Text;
 
 	randomize();
-	filename = IntToStr(rand()) +".png";
+	filename = IntToStr(rand()) +".bmp";
 	FStream= new TFileStream(filename, fmCreate);
 
 	ConnectIt();
@@ -172,7 +172,7 @@ void __fastcall TFm::Button1Click(TObject *Sender)
 	TImage* Image2 = new TImage(Fm);
 	Image2->Parent = Fm;
 	Image2->Position->X=650;
-	Image2->Position->Y=400;
+	Image2->Position->Y=200;
 	Image2->Bitmap->LoadFromFile(filename);
 }
 
