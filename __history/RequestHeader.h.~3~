@@ -1,5 +1,5 @@
-#ifndef ResponseHeaderH
-#define ResponseHeaderH
+#ifndef RequestHeaderH
+#define RequestHeaderH
 
 #include <System.Classes.hpp>
 #include <FMX.Controls.hpp>
@@ -10,17 +10,16 @@
 #include <FMX.Types.hpp>
 #include <FMX.Objects.hpp>
 
-class ResponseHeader {
+class RequestHeader {
 
 public:
-	char* FstBuff;
-	int HdrLen;
+	RequestHeader(UnicodeString);
 
-	ResponseHeader(char*);
+	UnicodeString UStrReqHdr;
+	const char* HdrToSent;
 
 	int Pos[20];
-
 	UnicodeString AttribStr[20];
 };
 
-#endif /* #ifndef ResponseHeaderH */
+#endif /* #ifndef RequestHeaderH */

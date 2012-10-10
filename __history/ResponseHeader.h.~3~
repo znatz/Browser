@@ -19,8 +19,6 @@ public:
 	ResponseHeader(char*);
 
 	int Pos[20];
-
-	UnicodeString AttribStr[20];
 };
 
 #endif /* #ifndef ResponseHeaderH */

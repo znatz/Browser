@@ -21,6 +21,7 @@ __published:	// IDE-managed Components
 	TMemo *Err;
 	TMemo *Output;
 	TButton *Button1;
+	TMemo *RspHdrEdt;
 
 
 	void __fastcall SbClick(TObject *Sender);

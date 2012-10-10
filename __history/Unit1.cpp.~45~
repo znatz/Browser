@@ -60,18 +60,6 @@ void Report(int iR, UnicodeString ms)
 	}
 }
 
-void RspReport(int iR, UnicodeString ms)
-{
-	if (iR==0)
-	{
-		Fm->RspHdrEdt->Text = Fm->RspHdrEdt->Text + ms + " OK " + ENDOFLINE ;
-	}
-	else
-	{
-		Fm->RspHdrEdt->Text = Fm->RspHdrEdt->Text + ms + " " + IntToStr(iR) + ENDOFLINE;
-	}
-}
-
 //---------------------------------------------------------------------------
 bool ConnectIt()
 {
@@ -127,7 +115,7 @@ bool ConnectIt()
 								  //--------------------------
 					    Report(RspHdr.HdrLen,"TotalBytes");
 						for (int i = 0; i < 20; i++) {
-							RspReport(1,RspHdr.AttribStr[i]);
+							Report(RspHdr.Pos[i],"Pos");
 							}
 				}
 				else

@@ -18,7 +18,8 @@ public:
 	UnicodeString UStrReqHdr;
 	const char* HdrToSent;
 
-
+  //	int Pos[20];
+  //	UnicodeString AttribStr[];
 };
 
 #endif /* #ifndef RequestHeaderH */
