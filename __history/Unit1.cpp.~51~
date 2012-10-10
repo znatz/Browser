@@ -4,6 +4,8 @@
 #pragma hdrstop
 
 #include "Unit1.h"
+#include "RequestHeader.h"
+#include "ResponseHeader.h"
 //---------------------------------------------------------------------------
 #include <winsock2.h>
 #include <WS2tcpip.h>
@@ -24,7 +26,7 @@ TFileStream* FStream;
 
 bool ConnectIt();
 void Report(int, UnicodeString);
-const char* SetupReqHdr();
+void RspReport(int, UnicodeString);
 //---------------------------------------------------------------------------
 TFm *Fm;
 //---------------------------------------------------------------------------
@@ -58,26 +60,19 @@ void Report(int iR, UnicodeString ms)
 		Fm->Err->Text = Fm->Err->Text + ms + " " + IntToStr(iR) + ENDOFLINE;
 	}
 }
-//---------------------------------------------------------------------------
-const char* SetupReqHdr()
+
+void RspReport(int iR, UnicodeString ms)
 {
-	// Setup request header
-	const char* sendbuff;
-	if (Fm->RqstHdr->Text=="")
+	if (iR==0)
 	{
-        // If header is empty, the default is as follow.
-		UnicodeString requst = "GET /Sample.bmp HTTP/1.1\r\n" ;
-		requst = requst + "Host:" + Fm->Input->Text  + "\r\n";
-		requst = requst + "Connection: close\r\n\r\n";
-		Fm->RqstHdr->Text = requst;     		// This line has to be above the below code.
-		sendbuff = AnsiString(requst).c_str();  // The .c_str() method actually changes the memory.
+		Fm->RspHdrEdt->Text = Fm->RspHdrEdt->Text + ms + " OK " + ENDOFLINE ;
 	}
 	else
 	{
-		sendbuff = AnsiString(Fm->RqstHdr->Text).c_str();
-	};
-	return sendbuff;
+		Fm->RspHdrEdt->Text = Fm->RspHdrEdt->Text + ms + " " + IntToStr(iR) + ENDOFLINE;
+	}
 }
+
 //---------------------------------------------------------------------------
 bool ConnectIt()
 {
@@ -108,7 +103,8 @@ bool ConnectIt()
 // Free up addrinfo
 	freeaddrinfo(result);
 // Send request header
-	iResult = send(iSocket, SetupReqHdr(), BUFFLEN,0);
+	RequestHeader RqHdr(Fm->RqstHdr->Text);
+	iResult = send(iSocket, RqHdr.HdrToSent, BUFFLEN,0);
 	msg = "Bytes sent";
 	Report(iResult,msg);
 // Receive data
@@ -127,10 +123,14 @@ bool ConnectIt()
 
 				if (totalRecvBytes==iResult)
 				{
-				// The counts of bytes is counted by finding \r\n\r\n
-					  int StartPos = UnicodeString(recvbuff).Pos(UnicodeString("\r\n\r\n"))+ 3;
-					  FStream->Write(&recvbuff[StartPos],iResult-StartPos);
-
+					  ResponseHeader RspHdr(recvbuff);
+					  FStream->Write(&recvbuff[RspHdr.HdrLen],iResult-RspHdr.HdrLen);
+								  //--------------------------
+					    Report(RspHdr.HdrLen,"TotalBytes");
+						for (int i = 0; i < 20; i++) {
+							RspReport(1,RspHdr.AttribStr[i]);
+							RspReport(1,RspHdr.pAttribStr[i]+"---"+RspHdr.vAttribStr[i]);
+							}
 				}
 				else
 				{
@@ -163,6 +163,10 @@ bool ConnectIt()
 	closesocket(iSocket);
 	WSACleanup();
 	FStream->Free();
+
+
+
+//--------------------------
 
 return TRUE;
 }

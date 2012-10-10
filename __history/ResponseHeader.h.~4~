@@ -21,8 +21,6 @@ public:
 	int Pos[20];
 
 	UnicodeString AttribStr[20];
-	UnicodeString pAttribStr[20];
-	UnicodeString vAttribStr[20];
 };
 
 #endif /* #ifndef ResponseHeaderH */
