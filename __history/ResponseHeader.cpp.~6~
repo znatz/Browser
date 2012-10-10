@@ -16,8 +16,8 @@ ResponseHeader::ResponseHeader(char* val) {
 	int i = 0;
 	do
 	{
-		Pos[i] = FullStr.Pos("\r\n")+ 1;
-		AttribStr[i]= FullStr.SubString(1,Pos[i]);
+		Pos[i] = FullStr.Pos(UnicodeString("\r\n"))+ 2;
+		AttribStr[i]= FullStr.SubString(0,Pos[i]);
 		FullStr = FullStr.SubString(Pos[i],HdrLen+3);
 		i++;
 	}while( i<20 && Pos[i-1]>=3 );

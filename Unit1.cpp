@@ -26,6 +26,7 @@ TFileStream* FStream;
 
 bool ConnectIt();
 void Report(int, UnicodeString);
+void RspReport(int, UnicodeString);
 //---------------------------------------------------------------------------
 TFm *Fm;
 //---------------------------------------------------------------------------
