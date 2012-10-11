@@ -10,15 +10,13 @@
 #include <FMX.Types.hpp>
 #include <FMX.Objects.hpp>
 
+class RequestHeader {
 
-class RequestHeader
-{
+public:
+	RequestHeader(UnicodeString);
 
-	public:
-		RequestHeader(UnicodeString);
-
-		UnicodeString UStrReqHdr;
-		const char* HdrToSent;
+	UnicodeString UStrReqHdr;
+	const char* HdrToSent;
 
 
 };

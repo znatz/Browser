@@ -10,19 +10,33 @@
 #include <FMX.Types.hpp>
 #include <FMX.Objects.hpp>
 
-class ResponseHeader {
 
-public:
-	char* FstBuff;
-	int HdrLen;
+struct node
+{
+		UnicodeString fAttrib;
+		UnicodeString pAttrib;
+		UnicodeString vAttrib;
+		node* next;
+}*p;
 
-	ResponseHeader(char*);
 
-	int Pos[20];
 
-	UnicodeString AttribStr[20];
-	UnicodeString pAttribStr[20];
-	UnicodeString vAttribStr[20];
+class ResponseHeader
+{
+
+	public:
+		char* FstBuff;
+		int HdrLen;
+
+		ResponseHeader(char*);
+
+		int Pos[20];
+
+		UnicodeString AttribStr[20];
+		UnicodeString pAttribStr[20];
+		UnicodeString vAttribStr[20];
+		struct node* rootAttrib;
+		struct node* list;
 };
 
 #endif /* #ifndef ResponseHeaderH */
