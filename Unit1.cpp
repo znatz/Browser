@@ -23,6 +23,7 @@ int  iResult;
 UnicodeString msg;
 UnicodeString filename;
 TFileStream* FStream;
+ResponseHeader RspHdr("");
 
 bool ConnectIt();
 void Report(int, UnicodeString);
@@ -69,7 +70,7 @@ void RspReport(int iR, UnicodeString ms)
 	}
 	else
 	{
-		Fm->RspHdrEdt->Text = Fm->RspHdrEdt->Text + ms;// + " " + IntToStr(iR) + ENDOFLINE;
+		Fm->RspHdrEdt->Text = Fm->RspHdrEdt->Text + ms;
 	}
 }
 
@@ -122,16 +123,9 @@ bool ConnectIt()
 
 				if (totalRecvBytes==iResult)
 				{
-					  ResponseHeader RspHdr(recvbuff);
+					  RspHdr.SetResponseHeader(recvbuff);
 					  FStream->Write(&recvbuff[RspHdr.HdrLen],iResult-RspHdr.HdrLen);
 						Report(RspHdr.HdrLen,"TotalBytes");
-					  // Temporarily used to check whether the response header has been divided correctly.
-
-					node *q;
-					for(q=RspHdr.list;q->next!=NULL;q=q->next)
-					{
-						RspReport(1,q->pAttrib + " IS " + q->vAttrib);
-					}
 				}
 				else
 				{
@@ -184,5 +178,15 @@ void __fastcall TFm::Button1Click(TObject *Sender)
 	Image2->Bitmap->LoadFromFile(filename);
 }
 
+//---------------------------------------------------------------------------
+// The global rsphdr catched the recvbuff.
+void __fastcall TFm::BtnConSzClick(TObject *Sender)
+{
+	node *q;
+	for(q=RspHdr.list;q->next!=NULL;q=q->next)
+	{
+		RspReport(1,q->pAttrib + " IS " + q->vAttrib);
+	}
+}
 //---------------------------------------------------------------------------
 

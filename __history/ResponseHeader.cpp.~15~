@@ -3,10 +3,6 @@
 #include "ResponseHeader.h"
 
 ResponseHeader::ResponseHeader(char* val) {
-	ResponseHeader::SetResponseHeader(val);
-}
-
-void ResponseHeader::SetResponseHeader(char* val) {
 	FstBuff = val;
 	UnicodeString FullStr = UnicodeString(val);
 	UnicodeString TempFullStr = FullStr;
@@ -53,4 +49,3 @@ void ResponseHeader::SetResponseHeader(char* val) {
 	list->next=NULL;
 	list = rootAttrib;
 }
-

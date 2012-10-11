@@ -3,7 +3,7 @@ object Fm: TFm
   Top = 0
   BorderStyle = bsSizeToolWin
   Caption = #33258#28982#12398#12502#12521#12454#12470
-  ClientHeight = 657
+  ClientHeight = 678
   ClientWidth = 809
   FormFactor.Width = 1366
   FormFactor.Height = 768
@@ -73,5 +73,14 @@ object Fm: TFm
     Width = 553.000000000000000000
     DisableFocusEffect = False
     KeyboardType = vktDefault
+  end
+  object BtnConSz: TButton
+    DisableFocusEffect = False
+    Height = 22.000000000000000000
+    Position.X = 424.000000000000000000
+    Position.Y = 8.000000000000000000
+    Text = 'Get Content Size From Header'
+    Width = 185.000000000000000000
+    OnClick = BtnConSzClick
   end
 end

@@ -3,7 +3,7 @@ object Fm: TFm
   Top = 0
   BorderStyle = bsSizeToolWin
   Caption = #33258#28982#12398#12502#12521#12454#12470
-  ClientHeight = 545
+  ClientHeight = 678
   ClientWidth = 809
   FormFactor.Width = 1366
   FormFactor.Height = 768
@@ -28,17 +28,17 @@ object Fm: TFm
   end
   object Err: TMemo
     Touch.InteractiveGestures = [igPan]
-    Height = 193.000000000000000000
-    Position.X = 368.000000000000000000
-    Position.Y = 272.000000000000000000
+    Height = 200.000000000000000000
+    Position.X = 370.000000000000000000
+    Position.Y = 275.000000000000000000
     UseSmallScrollBars = True
-    Width = 249.000000000000000000
+    Width = 190.000000000000000000
     DisableFocusEffect = False
     KeyboardType = vktDefault
   end
   object Output: TMemo
     Touch.InteractiveGestures = [igPan]
-    Height = 425.000000000000000000
+    Height = 433.000000000000000000
     Position.X = 8.000000000000000000
     Position.Y = 40.000000000000000000
     UseSmallScrollBars = True
@@ -52,7 +52,25 @@ object Fm: TFm
     Position.X = 368.000000000000000000
     Position.Y = 40.000000000000000000
     UseSmallScrollBars = True
-    Width = 249.000000000000000000
+    Width = 417.000000000000000000
+    DisableFocusEffect = False
+    KeyboardType = vktDefault
+  end
+  object Button1: TButton
+    DisableFocusEffect = False
+    Height = 22.000000000000000000
+    Position.X = 328.000000000000000000
+    Position.Y = 8.000000000000000000
+    Text = 'Get Image'
+    Width = 80.000000000000000000
+    OnClick = Button1Click
+  end
+  object RspHdrEdt: TMemo
+    Touch.InteractiveGestures = [igPan]
+    Height = 129.000000000000000000
+    Position.X = 8.000000000000000000
+    Position.Y = 488.000000000000000000
+    Width = 553.000000000000000000
     DisableFocusEffect = False
     KeyboardType = vktDefault
   end

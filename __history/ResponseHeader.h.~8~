@@ -31,7 +31,7 @@ class ResponseHeader
 		int HdrLen;
 
 		ResponseHeader(char*);
-		void SetResponseHeader(char*);
+
 		int Pos[20];
 
 	public:
