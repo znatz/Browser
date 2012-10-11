@@ -23,6 +23,7 @@ int  iResult;
 UnicodeString msg;
 UnicodeString filename;
 TFileStream* FStream;
+ResponseHeader RspHdr("");
 
 bool ConnectIt();
 void Report(int, UnicodeString);
@@ -69,7 +70,7 @@ void RspReport(int iR, UnicodeString ms)
 	}
 	else
 	{
-		Fm->RspHdrEdt->Text = Fm->RspHdrEdt->Text + ms + " " + IntToStr(iR) + ENDOFLINE;
+		Fm->RspHdrEdt->Text = Fm->RspHdrEdt->Text + ms;
 	}
 }
 
@@ -110,7 +111,6 @@ bool ConnectIt()
 // Receive data
 	char* recvbuff = new char[BUFFLEN];
 	int totalRecvBytes = 0;
-
 	do
 	{
 		iResult = recv(iSocket, recvbuff, BUFFLEN, 0);
@@ -123,13 +123,9 @@ bool ConnectIt()
 
 				if (totalRecvBytes==iResult)
 				{
-					  ResponseHeader RspHdr(recvbuff);
+					  RspHdr.SetResponseHeader(recvbuff);
 					  FStream->Write(&recvbuff[RspHdr.HdrLen],iResult-RspHdr.HdrLen);
-								  //--------------------------
-					    Report(RspHdr.HdrLen,"TotalBytes");
-						for (int i = 0; i < 20; i++) {
-							RspReport(1,RspHdr.AttribStr[i]);
-							}
+						Report(RspHdr.HdrLen,"TotalBytes");
 				}
 				else
 				{
@@ -182,5 +178,20 @@ void __fastcall TFm::Button1Click(TObject *Sender)
 	Image2->Bitmap->LoadFromFile(filename);
 }
 
+//---------------------------------------------------------------------------
+// The global rsphdr catched the recvbuff.
+void __fastcall TFm::BtnConSzClick(TObject *Sender)
+{
+	node *q;
+	for(q=RspHdr.list;q->next!=NULL;q=q->next)
+	{
+		RspReport(1,q->pAttrib + " IS " + q->vAttrib);
+		// The length is found and casting to INT.
+		if (q->pAttrib=="Content-Length")
+		{
+			Report(q->vAttrib.ToInt()," is the lenth of the content");
+		}
+	}
+}
 //---------------------------------------------------------------------------
 

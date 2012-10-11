@@ -116,8 +116,6 @@ bool ConnectIt()
 		iResult = recv(iSocket, recvbuff, BUFFLEN, 0);
 		if (iResult>0)
 		{
-			msg = "Receiving bytes ...";
-			Report(iResult,msg);
 			Fm->Output->Text = Fm->Output->Text + UnicodeString(recvbuff).SubString(0,iResult);
 			totalRecvBytes += iResult;
 
@@ -186,6 +184,16 @@ void __fastcall TFm::BtnConSzClick(TObject *Sender)
 	for(q=RspHdr.list;q->next!=NULL;q=q->next)
 	{
 		RspReport(1,q->pAttrib + " IS " + q->vAttrib);
+		// The length is found and casting to INT.
+		if (q->pAttrib=="Content-Length")
+		{
+			Report(q->vAttrib.ToInt()," The lenth of the content is");
+		}
+		// The date is founnd.
+		else if (q->pAttrib=="Date")
+		 {
+			Report(0, "Date found at " + q->vAttrib);
+		 }
 	}
 }
 //---------------------------------------------------------------------------

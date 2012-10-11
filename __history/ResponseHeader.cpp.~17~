@@ -28,13 +28,12 @@ void ResponseHeader::SetResponseHeader(char* val) {
 		Pos[i] = FullStr.Pos("\r\n")+ 1;
 		// AttribStr is the line of Response Header
 		if (Pos[i]!=1) {
-			// minus 2 to get rid of \r\n
-			list->fAttrib = FullStr.SubString(1,Pos[i]-2);
+			list->fAttrib = FullStr.SubString(1,Pos[i]);
 			// Temppos is the position of ":" inside the line
 			int tempPos = list->fAttrib.Pos(":");
 			if (tempPos!=0) {
 				list->pAttrib = list->fAttrib.SubString(1,tempPos-1);
-				list->vAttrib = list->fAttrib.SubString(tempPos+1,list->fAttrib.Length());
+				list->vAttrib = list->fAttrib.SubString(tempPos+1,Pos[i]);
 			}
 			else {
 				list->pAttrib = list->vAttrib = list->fAttrib;
