@@ -23,10 +23,14 @@ int  iResult;
 UnicodeString msg;
 UnicodeString filename;
 TFileStream* FStream;
+TStringStream* TStr = new TStringStream();
+ResponseHeader RspHdr("");
 
 bool ConnectIt();
 void Report(int, UnicodeString);
 void RspReport(int, UnicodeString);
+void __fastcall ExamRspHdr();
+
 //---------------------------------------------------------------------------
 TFm *Fm;
 //---------------------------------------------------------------------------
@@ -69,7 +73,7 @@ void RspReport(int iR, UnicodeString ms)
 	}
 	else
 	{
-		Fm->RspHdrEdt->Text = Fm->RspHdrEdt->Text + ms + " " + IntToStr(iR) + ENDOFLINE;
+		Fm->RspHdrEdt->Text = Fm->RspHdrEdt->Text + ms;
 	}
 }
 
@@ -110,27 +114,27 @@ bool ConnectIt()
 // Receive data
 	char* recvbuff = new char[BUFFLEN];
 	int totalRecvBytes = 0;
-
 	do
 	{
 		iResult = recv(iSocket, recvbuff, BUFFLEN, 0);
 		if (iResult>0)
 		{
-			msg = "Receiving bytes ...";
-			Report(iResult,msg);
 			Fm->Output->Text = Fm->Output->Text + UnicodeString(recvbuff).SubString(0,iResult);
 			totalRecvBytes += iResult;
 
 				if (totalRecvBytes==iResult)
 				{
-					  ResponseHeader RspHdr(recvbuff);
+					  RspHdr.SetResponseHeader(recvbuff);
+					  ExamRspHdr();
+					  // If it is a bmp file, then save it to file.
+					  if (RspHdr.cType=="bmp")
+					  {
 					  FStream->Write(&recvbuff[RspHdr.HdrLen],iResult-RspHdr.HdrLen);
+					  }
+
+					  // Also save the buffer to a stream.
+					  TStr->Write(&recvbuff[RspHdr.HdrLen],iResult-RspHdr.HdrLen);
 						Report(RspHdr.HdrLen,"TotalBytes");
-					  // Temporarily used to check whether the response header has been divided correctly.
-						for (int i = 0; i < 20; i++) {
-							RspReport(1,RspHdr.AttribStr[i]);
-							RspReport(1,RspHdr.pAttribStr[i]+"---"+RspHdr.vAttribStr[i]);
-							}
 				}
 				else
 				{
@@ -174,6 +178,7 @@ return TRUE;
 
 void __fastcall TFm::Button1Click(TObject *Sender)
 {
+	if (RspHdr.cType=="bmp") {
 	TImage* Image2 = new TImage(Fm);
 	Image2->Parent = Fm;
 	Image2->Width = 200;
@@ -181,7 +186,46 @@ void __fastcall TFm::Button1Click(TObject *Sender)
 	Image2->Position->X= 560;
 	Image2->Position->Y= Fm->Err->Position->Y;
 	Image2->Bitmap->LoadFromFile(filename);
+	}
+	else {Report(0, "Not an image file.");  }
 }
 
+//---------------------------------------------------------------------------
+// The global rsphdr catched the recvbuff.
+void __fastcall TFm::BtnConSzClick(TObject *Sender)
+{
+	ExamRspHdr();
+}
+//---------------------------------------------------------------------------
+// The header is now examed before any further action.
+void __fastcall ExamRspHdr()
+{
+	node *q;
+	for(q=RspHdr.list;q->next!=NULL;q=q->next)
+	{
+		RspReport(1,q->pAttrib + " IS " + q->vAttrib);
+		// The length is found and casting to INT.
+		if (q->pAttrib=="Content-Length")
+		{
+			RspHdr.cSize = q->vAttrib.ToInt();
+			Report(RspHdr.cSize," The lenth of the content is");
+		}
+		// The date is founnd.
+		else if (q->pAttrib=="Date")
+		{
+			Report(0, "Date found at " + q->vAttrib);
+		}
+		// Check if it is a bmp file
+		else if (q->pAttrib=="Content-Type")
+		{
+			UnicodeString ustr = "image/bmp";
+			if(q->vAttrib==ustr)
+			{
+				RspHdr.cType="bmp";
+				Report(0,"Type"+RspHdr.cType);
+			}
+		}
+	}
+}
 //---------------------------------------------------------------------------
 

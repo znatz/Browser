@@ -23,11 +23,13 @@ __published:	// IDE-managed Components
 	TButton *Button1;
 	TMemo *RspHdrEdt;
 	TButton *BtnConSz;
+	TMemo *BodyEdt;
 
 
 	void __fastcall SbClick(TObject *Sender);
 	void __fastcall Button1Click(TObject *Sender);
 	void __fastcall BtnConSzClick(TObject *Sender);
+
 private:	// User declarations
 public:		// User declarations
 	__fastcall TFm(TComponent* Owner);

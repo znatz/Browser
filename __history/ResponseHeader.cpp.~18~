@@ -5,7 +5,7 @@
 ResponseHeader::ResponseHeader(char* val) {
 	ResponseHeader::SetResponseHeader(val);
 }
-//                                                                         //
+
 void ResponseHeader::SetResponseHeader(char* val) {
 	FstBuff = val;
 	UnicodeString FullStr = UnicodeString(val);
@@ -34,7 +34,7 @@ void ResponseHeader::SetResponseHeader(char* val) {
 			int tempPos = list->fAttrib.Pos(":");
 			if (tempPos!=0) {
 				list->pAttrib = list->fAttrib.SubString(1,tempPos-1);
-				list->vAttrib = list->fAttrib.SubString(tempPos+2,list->fAttrib.Length());
+				list->vAttrib = list->fAttrib.SubString(tempPos+1,list->fAttrib.Length());
 			}
 			else {
 				list->pAttrib = list->vAttrib = list->fAttrib;

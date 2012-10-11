@@ -27,12 +27,8 @@ class ResponseHeader
 {
 
 	public:
-		// The parameter of the Header
 		char* FstBuff;
 		int HdrLen;
-		// The parameter of contents
-		UnicodeString cType;
-		int cSize;
 
 		ResponseHeader(char*);
 		void SetResponseHeader(char*);
