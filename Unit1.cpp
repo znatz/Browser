@@ -126,18 +126,12 @@ bool ConnectIt()
 					  FStream->Write(&recvbuff[RspHdr.HdrLen],iResult-RspHdr.HdrLen);
 						Report(RspHdr.HdrLen,"TotalBytes");
 					  // Temporarily used to check whether the response header has been divided correctly.
-					                    /*
-                        	for (int i = 0; i < 20; i++) {
-                        							RspReport(1,RspHdr.AttribStr[i]);
-                        							RspReport(1,RspHdr.pAttribStr[i]+"---"+RspHdr.vAttribStr[i]);
-													}
-					*/
+
 					node *q;
 					for(q=RspHdr.list;q->next!=NULL;q=q->next)
 					{
 						RspReport(1,q->pAttrib + " IS " + q->vAttrib);
 					}
-
 				}
 				else
 				{

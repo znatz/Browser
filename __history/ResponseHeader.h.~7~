@@ -16,7 +16,7 @@ struct node
 		UnicodeString pAttrib;
 		UnicodeString vAttrib;
 		node* next ;
-};
+}*p;
 
 
 
@@ -34,6 +34,9 @@ class ResponseHeader
 
 		int Pos[20];
 
+	//	UnicodeString AttribStr[20];
+	//	UnicodeString pAttribStr[20];
+	//	UnicodeString vAttribStr[20];
 	public:
 		struct node* rootAttrib;
 		struct node* list;

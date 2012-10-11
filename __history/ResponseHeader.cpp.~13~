@@ -23,26 +23,26 @@ ResponseHeader::ResponseHeader(char* val) {
 	{
 		Pos[i] = FullStr.Pos("\r\n")+ 1;
 		// AttribStr is the line of Response Header
-		if (Pos[i]!=1) {
-			list->fAttrib = FullStr.SubString(1,Pos[i]);
-			// Temppos is the position of ":" inside the line
-			int tempPos = list->fAttrib.Pos(":");
-			if (tempPos!=0) {
-				list->pAttrib = list->fAttrib.SubString(1,tempPos-1);
-				list->vAttrib = list->fAttrib.SubString(tempPos+1,Pos[i]);
-			}
-			else {
-				list->pAttrib = list->vAttrib=list->fAttrib;
-			}
+		list->fAttrib = FullStr.SubString(1,Pos[i]);
+		// Temppos is the position of ":" inside the line
+		int tempPos = list->fAttrib.Pos(":");
+		if (tempPos!=0) {
 
-			FullStr = FullStr.SubString(Pos[i],HdrLen+3);
-			if (FullStr.Pos("\r\n")!=FullStr.Pos("\r\n\r\n"))
-			{
+		list->pAttrib = list->fAttrib.SubString(1,tempPos-1);
+		list->vAttrib = list->fAttrib.SubString(tempPos+1,Pos[i]);
+		}
+		else {
+		list->pAttrib = list->vAttrib=list->fAttrib;
+		}
+
+
+
+		FullStr = FullStr.SubString(Pos[i],HdrLen+3);
+
 				struct node* tempNode = new node;
 				list->next = tempNode;
 				list = tempNode;
-			}
-		}
+
 
 		i++;
 	}while( Pos[i-1]>=3 );
