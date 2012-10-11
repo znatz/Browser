@@ -69,7 +69,7 @@ void RspReport(int iR, UnicodeString ms)
 	}
 	else
 	{
-		Fm->RspHdrEdt->Text = Fm->RspHdrEdt->Text + ms + " " + IntToStr(iR) + ENDOFLINE;
+		Fm->RspHdrEdt->Text = Fm->RspHdrEdt->Text + ms;// + " " + IntToStr(iR) + ENDOFLINE;
 	}
 }
 
@@ -110,7 +110,6 @@ bool ConnectIt()
 // Receive data
 	char* recvbuff = new char[BUFFLEN];
 	int totalRecvBytes = 0;
-
 	do
 	{
 		iResult = recv(iSocket, recvbuff, BUFFLEN, 0);
@@ -127,10 +126,18 @@ bool ConnectIt()
 					  FStream->Write(&recvbuff[RspHdr.HdrLen],iResult-RspHdr.HdrLen);
 						Report(RspHdr.HdrLen,"TotalBytes");
 					  // Temporarily used to check whether the response header has been divided correctly.
-						for (int i = 0; i < 20; i++) {
-							RspReport(1,RspHdr.AttribStr[i]);
-							RspReport(1,RspHdr.pAttribStr[i]+"---"+RspHdr.vAttribStr[i]);
-							}
+					                    /*
+                        	for (int i = 0; i < 20; i++) {
+                        							RspReport(1,RspHdr.AttribStr[i]);
+                        							RspReport(1,RspHdr.pAttribStr[i]+"---"+RspHdr.vAttribStr[i]);
+													}
+					*/
+					node *q;
+					for(q=RspHdr.list;q->next!=NULL;q=q->next)
+					{
+						RspReport(1,q->pAttrib + " IS " + q->vAttrib);
+					}
+
 				}
 				else
 				{

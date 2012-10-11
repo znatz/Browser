@@ -10,16 +10,14 @@
 #include <FMX.Types.hpp>
 #include <FMX.Objects.hpp>
 
+
 struct node
 {
 		UnicodeString fAttrib;
 		UnicodeString pAttrib;
 		UnicodeString vAttrib;
-		node* next ;
+		node* next;
 }*p;
-
-
-
 
 
 
@@ -34,13 +32,11 @@ class ResponseHeader
 
 		int Pos[20];
 
-	//	UnicodeString AttribStr[20];
-	//	UnicodeString pAttribStr[20];
-	//	UnicodeString vAttribStr[20];
-	public:
+		UnicodeString AttribStr[20];
+		UnicodeString pAttribStr[20];
+		UnicodeString vAttribStr[20];
 		struct node* rootAttrib;
 		struct node* list;
-		struct node* q;
 };
 
 #endif /* #ifndef ResponseHeaderH */
