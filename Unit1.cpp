@@ -129,7 +129,7 @@ bool ConnectIt()
 					  // If it is a bmp file, then save it to file.
 					  if (RspHdr.cType!=".html")
 					  {
-						Report(1," is bmp");
+						Report(0,"Not an HTML ");
 						filename = IntToStr(rand()) + RspHdr.cType;
 						FStream= new TFileStream(filename, fmCreate);
 						FStream->Write(&recvbuff[RspHdr.HdrLen],iResult-RspHdr.HdrLen);

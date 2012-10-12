@@ -23,11 +23,13 @@ int  iResult;
 UnicodeString msg;
 UnicodeString filename;
 TFileStream* FStream;
-ResponseHeader RspHdr_Global("");
+TStringStream* TStr = new TStringStream();
+ResponseHeader RspHdr("");
 
 bool ConnectIt();
 void Report(int, UnicodeString);
 void RspReport(int, UnicodeString);
+
 //---------------------------------------------------------------------------
 TFm *Fm;
 //---------------------------------------------------------------------------
@@ -43,8 +45,7 @@ void __fastcall TFm::SbClick(TObject *Sender)
 	UnicodeString str = Input->Text;
 
 	randomize();
-	filename = IntToStr(rand()) +".png";
-	FStream= new TFileStream(filename, fmCreate);
+
 
 	ConnectIt();
 }
@@ -116,21 +117,34 @@ bool ConnectIt()
 		iResult = recv(iSocket, recvbuff, BUFFLEN, 0);
 		if (iResult>0)
 		{
-			msg = "Receiving bytes ...";
-			Report(iResult,msg);
 			Fm->Output->Text = Fm->Output->Text + UnicodeString(recvbuff).SubString(0,iResult);
 			totalRecvBytes += iResult;
 
 				if (totalRecvBytes==iResult)
 				{
-					  ResponseHeader RspHdr(recvbuff);
-					  RspHdr_Global=RspHdr;
-					  FStream->Write(&recvbuff[RspHdr.HdrLen],iResult-RspHdr.HdrLen);
-						Report(RspHdr.HdrLen,"TotalBytes");
+					  RspHdr.SetResponseHeader(recvbuff);
+					  Report(RspHdr.cSize," The lenth of the content is");
+					  Report(1, " The date is " + RspHdr.cDate);
+
+					  // If it is a bmp file, then save it to file.
+					  if (RspHdr.cType!=".html")
+					  {
+						Report(1," is bmp");
+						filename = IntToStr(rand()) + RspHdr.cType;
+						FStream= new TFileStream(filename, fmCreate);
+						FStream->Write(&recvbuff[RspHdr.HdrLen],iResult-RspHdr.HdrLen);
+					  }
+
+					  // else save the buffer to a stream. Both exclude the header
+					  TStr->Write(&recvbuff[RspHdr.HdrLen],iResult-RspHdr.HdrLen);
+					  Report(RspHdr.HdrLen,"Total Bytes of header");
 				}
 				else
-				{
-					FStream->Write(recvbuff,iResult);
+				{      if (RspHdr.cType!=".html")
+					   {
+						 FStream->Write(recvbuff,iResult);
+					   }
+					   TStr->Write(recvbuff,iResult);
 				}
 
 		}
@@ -160,7 +174,8 @@ bool ConnectIt()
 	WSACleanup();
 	FStream->Free();
 
-
+// Show the body in the BodyEdt from TStr.
+Fm->BodyEdt->Text = TStr->DataString;
 
 //--------------------------
 
@@ -170,6 +185,7 @@ return TRUE;
 
 void __fastcall TFm::Button1Click(TObject *Sender)
 {
+	if (RspHdr.cType!=".html") {
 	TImage* Image2 = new TImage(Fm);
 	Image2->Parent = Fm;
 	Image2->Width = 200;
@@ -177,17 +193,11 @@ void __fastcall TFm::Button1Click(TObject *Sender)
 	Image2->Position->X= 560;
 	Image2->Position->Y= Fm->Err->Position->Y;
 	Image2->Bitmap->LoadFromFile(filename);
+	}
+	else {Report(0, "Not an image file.");  }
 }
 
 //---------------------------------------------------------------------------
 // The global rsphdr catched the recvbuff.
-void __fastcall TFm::BtnConSzClick(TObject *Sender)
-{
-	node *q;
-	for(q=RspHdr_Global.list;q->next!=NULL;q=q->next)
-	{
-		RspReport(1,q->pAttrib + " the second time is " + q->vAttrib);
-	}
-}
-//---------------------------------------------------------------------------
+
 
