@@ -1,7 +1,0 @@
-#ifndef ResponseHeaderH
-#define ResponseHeaderH
-
-class ResponseHeader {
-};
-
-#endif /* #ifndef ResponseHeaderH */

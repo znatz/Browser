@@ -32,14 +32,11 @@ class ResponseHeader
 		int HdrLen;
 		// The parameter of contents
 		UnicodeString cType;
-        UnicodeString cDate;
 		int cSize;
-		int Pos[20];
 
 		ResponseHeader(char*);
 		void SetResponseHeader(char*);
-		void __fastcall ExamRspHdr();
-
+		int Pos[20];
 
 	public:
 		struct node* rootAttrib;

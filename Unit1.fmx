@@ -3,7 +3,7 @@ object Fm: TFm
   Top = 0
   BorderStyle = bsSizeToolWin
   Caption = #33258#28982#12398#12502#12521#12454#12470
-  ClientHeight = 685
+  ClientHeight = 692
   ClientWidth = 809
   FormFactor.Width = 1366
   FormFactor.Height = 768
@@ -81,7 +81,6 @@ object Fm: TFm
     Position.Y = 8.000000000000000000
     Text = 'Get Content Size From Header'
     Width = 185.000000000000000000
-    OnClick = BtnConSzClick
   end
   object BodyEdt: TMemo
     Touch.InteractiveGestures = [igPan]

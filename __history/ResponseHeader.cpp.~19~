@@ -53,32 +53,5 @@ void ResponseHeader::SetResponseHeader(char* val) {
 	}while( Pos[i-1]>=3 );
 	list->next=NULL;
 	list = rootAttrib;
-	ExamRspHdr();
-}
-
-void __fastcall ResponseHeader::ExamRspHdr()
-{
-	node *q;
-	for(q=list;q->next!=NULL;q=q->next)
-	{
-		// The length is found and casting to INT.
-		if (q->pAttrib=="Content-Length")
-		{
-			cSize = q->vAttrib.ToInt();
-		}
-		// The date is founnd.
-		else if (q->pAttrib=="Date")
-		{
-			cDate = q->vAttrib;
-		}
-		// Check if it is a bmp file
-		else if (q->pAttrib=="Content-Type")
-		{
-			if(q->vAttrib=="image/bmp")
-			{
-				cType="bmp";
-			}
-		}
-	}
 }
 

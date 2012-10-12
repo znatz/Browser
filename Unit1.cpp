@@ -29,7 +29,6 @@ ResponseHeader RspHdr("");
 bool ConnectIt();
 void Report(int, UnicodeString);
 void RspReport(int, UnicodeString);
-void __fastcall ExamRspHdr();
 
 //---------------------------------------------------------------------------
 TFm *Fm;
@@ -125,10 +124,13 @@ bool ConnectIt()
 				if (totalRecvBytes==iResult)
 				{
 					  RspHdr.SetResponseHeader(recvbuff);
-					  ExamRspHdr();
+					  Report(RspHdr.cSize," The lenth of the content is");
+					  Report(1, " The date is " + RspHdr.cDate);
+
 					  // If it is a bmp file, then save it to file.
 					  if (RspHdr.cType=="bmp")
 					  {
+						Report(1," is bmp");
 						FStream->Write(&recvbuff[RspHdr.HdrLen],iResult-RspHdr.HdrLen);
 					  }
 
@@ -196,43 +198,5 @@ void __fastcall TFm::Button1Click(TObject *Sender)
 
 //---------------------------------------------------------------------------
 // The global rsphdr catched the recvbuff.
-void __fastcall TFm::BtnConSzClick(TObject *Sender)
-{
-	ExamRspHdr();
-}
-//---------------------------------------------------------------------------
-// The header is now examed before any further action.
-void __fastcall ExamRspHdr()
-{
-	node *q;
-	for(q=RspHdr.list;q->next!=NULL;q=q->next)
-	{
-		RspReport(1,q->pAttrib + " IS " + q->vAttrib);
-		// The length is found and casting to INT.
-		if (q->pAttrib=="Content-Length")
-		{
-			RspHdr.cSize = q->vAttrib.ToInt();
-			Report(RspHdr.cSize," The lenth of the content is");
-		}
-		// The date is founnd.
-		else if (q->pAttrib=="Date")
-		{
-			Report(0, "Date found at " + q->vAttrib);
-		}
-		// Check if it is a bmp file
-		else if (q->pAttrib=="Content-Type")
-		{
-			UnicodeString ustr = "image/bmp";
-			if(q->vAttrib==ustr)
-			{
-				RspHdr.cType="bmp";
-				Report(0,"Type"+RspHdr.cType);
-			}
-		}
-	}
-}
-//---------------------------------------------------------------------------
 
-
-//---------------------------------------------------------------------------
 
