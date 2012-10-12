@@ -78,10 +78,6 @@ void __fastcall ResponseHeader::ExamRspHdr()
 			{
 				cType=".bmp";
 			}
-			else if (q->vAttrib.SubString(1,9)=="text/html")
-			{
-				cType=".html";
-			}
 		}
 	}
 }

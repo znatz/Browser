@@ -127,7 +127,7 @@ bool ConnectIt()
 					  Report(1, " The date is " + RspHdr.cDate);
 
 					  // If it is a bmp file, then save it to file.
-					  if (RspHdr.cType==".bmp")
+					  if (RspHdr.cType!=".html")
 					  {
 						Report(1," is bmp");
 						filename = IntToStr(rand()) + RspHdr.cType;
@@ -140,7 +140,7 @@ bool ConnectIt()
 					  Report(RspHdr.HdrLen,"Total Bytes of header");
 				}
 				else
-				{      if (RspHdr.cType==".bmp")
+				{      if (RspHdr.cType!=".html")
 					   {
 						 FStream->Write(recvbuff,iResult);
 					   }
@@ -185,7 +185,7 @@ return TRUE;
 
 void __fastcall TFm::Button1Click(TObject *Sender)
 {
-	if (RspHdr.cType==".bmp") {
+	if (RspHdr.cType!=".html") {
 	TImage* Image2 = new TImage(Fm);
 	Image2->Parent = Fm;
 	Image2->Width = 200;
