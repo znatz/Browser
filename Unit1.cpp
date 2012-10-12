@@ -45,8 +45,7 @@ void __fastcall TFm::SbClick(TObject *Sender)
 	UnicodeString str = Input->Text;
 
 	randomize();
-	filename = IntToStr(rand()) +".png";
-	FStream= new TFileStream(filename, fmCreate);
+
 
 	ConnectIt();
 }
@@ -128,9 +127,11 @@ bool ConnectIt()
 					  Report(1, " The date is " + RspHdr.cDate);
 
 					  // If it is a bmp file, then save it to file.
-					  if (RspHdr.cType=="bmp")
+					  if (RspHdr.cType==".bmp")
 					  {
 						Report(1," is bmp");
+						filename = IntToStr(rand()) + RspHdr.cType;
+						FStream= new TFileStream(filename, fmCreate);
 						FStream->Write(&recvbuff[RspHdr.HdrLen],iResult-RspHdr.HdrLen);
 					  }
 
@@ -139,7 +140,7 @@ bool ConnectIt()
 					  Report(RspHdr.HdrLen,"Total Bytes of header");
 				}
 				else
-				{      if (RspHdr.cType=="bmp")
+				{      if (RspHdr.cType==".bmp")
 					   {
 						 FStream->Write(recvbuff,iResult);
 					   }
@@ -184,7 +185,7 @@ return TRUE;
 
 void __fastcall TFm::Button1Click(TObject *Sender)
 {
-	if (RspHdr.cType=="bmp") {
+	if (RspHdr.cType==".bmp") {
 	TImage* Image2 = new TImage(Fm);
 	Image2->Parent = Fm;
 	Image2->Width = 200;

@@ -76,7 +76,7 @@ void __fastcall ResponseHeader::ExamRspHdr()
 		{
 			if(q->vAttrib=="image/bmp")
 			{
-				cType=".bmp";
+				cType="bmp";
 			}
 		}
 	}

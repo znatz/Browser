@@ -23,10 +23,13 @@ int  iResult;
 UnicodeString msg;
 UnicodeString filename;
 TFileStream* FStream;
+TStringStream* TStr = new TStringStream();
+ResponseHeader RspHdr("");
 
 bool ConnectIt();
 void Report(int, UnicodeString);
 void RspReport(int, UnicodeString);
+
 //---------------------------------------------------------------------------
 TFm *Fm;
 //---------------------------------------------------------------------------
@@ -115,27 +118,32 @@ bool ConnectIt()
 		iResult = recv(iSocket, recvbuff, BUFFLEN, 0);
 		if (iResult>0)
 		{
-			msg = "Receiving bytes ...";
-			Report(iResult,msg);
 			Fm->Output->Text = Fm->Output->Text + UnicodeString(recvbuff).SubString(0,iResult);
 			totalRecvBytes += iResult;
 
 				if (totalRecvBytes==iResult)
 				{
-					  ResponseHeader RspHdr(recvbuff);
-					  FStream->Write(&recvbuff[RspHdr.HdrLen],iResult-RspHdr.HdrLen);
-						Report(RspHdr.HdrLen,"TotalBytes");
-					  // Temporarily used to check whether the response header has been divided correctly.
+					  RspHdr.SetResponseHeader(recvbuff);
+					  Report(RspHdr.cSize," The lenth of the content is");
+					  Report(1, " The date is " + RspHdr.cDate);
 
-					node *q;
-					for(q=RspHdr.list;q->next!=NULL;q=q->next)
-					{
-						RspReport(1,q->pAttrib + " IS " + q->vAttrib);
-					}
+					  // If it is a bmp file, then save it to file.
+					  if (RspHdr.cType=="bmp")
+					  {
+						Report(1," is bmp");
+						FStream->Write(&recvbuff[RspHdr.HdrLen],iResult-RspHdr.HdrLen);
+					  }
+
+					  // else save the buffer to a stream. Both exclude the header
+					  TStr->Write(&recvbuff[RspHdr.HdrLen],iResult-RspHdr.HdrLen);
+					  Report(RspHdr.HdrLen,"Total Bytes of header");
 				}
 				else
-				{
-					FStream->Write(recvbuff,iResult);
+				{      if (RspHdr.cType=="bmp")
+					   {
+						 FStream->Write(recvbuff,iResult);
+					   }
+					   TStr->Write(recvbuff,iResult);
 				}
 
 		}
@@ -165,7 +173,8 @@ bool ConnectIt()
 	WSACleanup();
 	FStream->Free();
 
-
+// Show the body in the BodyEdt from TStr.
+Fm->BodyEdt->Text = TStr->DataString;
 
 //--------------------------
 
@@ -175,6 +184,7 @@ return TRUE;
 
 void __fastcall TFm::Button1Click(TObject *Sender)
 {
+	if (RspHdr.cType=="bmp") {
 	TImage* Image2 = new TImage(Fm);
 	Image2->Parent = Fm;
 	Image2->Width = 200;
@@ -182,7 +192,11 @@ void __fastcall TFm::Button1Click(TObject *Sender)
 	Image2->Position->X= 560;
 	Image2->Position->Y= Fm->Err->Position->Y;
 	Image2->Bitmap->LoadFromFile(filename);
+	}
+	else {Report(0, "Not an image file.");  }
 }
 
 //---------------------------------------------------------------------------
+// The global rsphdr catched the recvbuff.
+
 
