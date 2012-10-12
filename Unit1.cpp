@@ -41,9 +41,13 @@ __fastcall TFm::TFm(TComponent* Owner)
 //---------------------------------------------------------------------------
 void __fastcall TFm::SbClick(TObject *Sender)
 {
-	Fm->Err->Text="";
-	Fm->RqstHdr->Text=="";
-	UnicodeString str = Input->Text;
+	Fm->Err->Text		=	"";
+	Fm->RqstHdr->Text	=	"";
+	Fm->Output->Text	=	"";
+	Fm->BodyEdt->Text	=	"";
+	Fm->Err->Text		=	"";
+	Fm->RspHdrEdt->Text	=	"";
+	UnicodeString str 	= 	Input->Text;
 
 	randomize();
 
