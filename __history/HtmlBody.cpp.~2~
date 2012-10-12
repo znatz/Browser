@@ -1,0 +1,15 @@
+#pragma hdrstop
+
+#include "HtmlBody.h"
+
+HtmlBody::HtmlBody() {
+
+}
+
+void HtmlBody::SetBody() {
+
+}
+
+HtmlBody::HtmlBody(int param1) {
+
+}

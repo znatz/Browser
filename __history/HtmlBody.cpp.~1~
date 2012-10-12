@@ -1,0 +1,11 @@
+#pragma hdrstop
+
+#include "class1.h"
+
+HtmlBody::HtmlBody() {
+
+}
+
+void HtmlBody::SetBody() {
+
+}

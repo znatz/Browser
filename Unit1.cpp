@@ -6,6 +6,7 @@
 #include "Unit1.h"
 #include "RequestHeader.h"
 #include "ResponseHeader.h"
+#include "HtmlBody.h"
 //---------------------------------------------------------------------------
 #include <winsock2.h>
 #include <WS2tcpip.h>
@@ -23,8 +24,8 @@ int  iResult;
 UnicodeString msg;
 UnicodeString filename;
 TFileStream* FStream;
-TStringStream* TStr = new TStringStream();
 ResponseHeader RspHdr("");
+HtmlBody Content;
 
 bool ConnectIt();
 void Report(int, UnicodeString);
@@ -136,7 +137,7 @@ bool ConnectIt()
 					  }
 
 					  // else save the buffer to a stream. Both exclude the header
-					  TStr->Write(&recvbuff[RspHdr.HdrLen],iResult-RspHdr.HdrLen);
+					  Content.SetBody(recvbuff,RspHdr.HdrLen,iResult-RspHdr.HdrLen);
 					  Report(RspHdr.HdrLen,"Total Bytes of header");
 				}
 				else
@@ -144,7 +145,7 @@ bool ConnectIt()
 					   {
 						 FStream->Write(recvbuff,iResult);
 					   }
-					   TStr->Write(recvbuff,iResult);
+					   Content.SetBody(recvbuff,0,iResult);
 				}
 
 		}
@@ -175,8 +176,7 @@ bool ConnectIt()
 	FStream->Free();
 
 // Show the body in the BodyEdt from TStr.
-Fm->BodyEdt->Text = TStr->DataString;
-
+Fm->BodyEdt->Text=Content.cBody;
 //--------------------------
 
 return TRUE;

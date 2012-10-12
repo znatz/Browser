@@ -104,6 +104,10 @@
         <TASM_Debugging>None</TASM_Debugging>
     </PropertyGroup>
     <ItemGroup>
+        <CppCompile Include="HtmlBody.cpp">
+            <DependentOn>HtmlBody.h</DependentOn>
+            <BuildOrder>7</BuildOrder>
+        </CppCompile>
         <None Include="ModelSupport_Project1\default.txaPackage"/>
         <None Include="ModelSupport_Project1\default.txvpck"/>
         <CppCompile Include="Project1.cpp">
