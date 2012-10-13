@@ -21,7 +21,6 @@ __published:	// IDE-managed Components
 	TMemo *Err;
 	TMemo *Output;
 	TButton *Button1;
-	TMemo *RspHdrEdt;
 	TButton *BtnConSz;
 	TMemo *BodyEdt;
 

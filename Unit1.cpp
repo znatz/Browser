@@ -28,7 +28,6 @@ HtmlBody Content;
 
 bool ConnectIt();
 void Report(int, UnicodeString);
-void RspReport(int, UnicodeString);
 
 //---------------------------------------------------------------------------
 TFm *Fm;
@@ -44,7 +43,7 @@ void __fastcall TFm::SbClick(TObject *Sender)
 	Fm->Output->Text	=	"";
 	Fm->BodyEdt->Text	=	"";
 	Fm->Err->Text		=	"";
-	Fm->RspHdrEdt->Text	=	"";
+	//Fm->RspHdrEdt->Text	=	"";
 	UnicodeString str 	= 	Input->Text;
 
 	randomize();
@@ -66,17 +65,6 @@ void Report(int iR, UnicodeString ms)
 	}
 }
 
-void RspReport(int iR, UnicodeString ms)
-{
-	if (iR==0)
-	{
-		Fm->RspHdrEdt->Text = Fm->RspHdrEdt->Text + ms + " OK " + ENDOFLINE ;
-	}
-	else
-	{
-		Fm->RspHdrEdt->Text = Fm->RspHdrEdt->Text + ms;
-	}
-}
 
 //---------------------------------------------------------------------------
 bool ConnectIt()
