@@ -6,6 +6,7 @@
 #include "Unit1.h"
 #include "RequestHeader.h"
 #include "ResponseHeader.h"
+#include "HtmlBody.h"
 //---------------------------------------------------------------------------
 #include <winsock2.h>
 #include <WS2tcpip.h>
@@ -22,9 +23,8 @@
 int  iResult;
 UnicodeString msg;
 UnicodeString filename;
-TFileStream* FStream;
-TStringStream* TStr = new TStringStream();
 ResponseHeader RspHdr("");
+HtmlBody Content;
 
 bool ConnectIt();
 void Report(int, UnicodeString);
@@ -40,13 +40,15 @@ __fastcall TFm::TFm(TComponent* Owner)
 //---------------------------------------------------------------------------
 void __fastcall TFm::SbClick(TObject *Sender)
 {
-	Fm->Err->Text="";
-	Fm->RqstHdr->Text=="";
-	UnicodeString str = Input->Text;
+	Fm->Err->Text		=	"";
+	Fm->Output->Text	=	"";
+	Fm->BodyEdt->Text	=	"";
+	Fm->Err->Text		=	"";
+	Fm->RspHdrEdt->Text	=	"";
+	UnicodeString str 	= 	Input->Text;
 
 	randomize();
-	filename = IntToStr(rand()) +".png";
-	FStream= new TFileStream(filename, fmCreate);
+
 
 	ConnectIt();
 }
@@ -123,27 +125,19 @@ bool ConnectIt()
 
 				if (totalRecvBytes==iResult)
 				{
+					  // RspHdr get the buffer, calculate the length, create the header
 					  RspHdr.SetResponseHeader(recvbuff);
+					  // Content get the buffer, create the first part of content
+					  // Starting from the end of the header.
+					  Content.SetBody(recvbuff,RspHdr.HdrLen,iResult-RspHdr.HdrLen);
+
 					  Report(RspHdr.cSize," The lenth of the content is");
 					  Report(1, " The date is " + RspHdr.cDate);
-
-					  // If it is a bmp file, then save it to file.
-					  if (RspHdr.cType=="bmp")
-					  {
-						Report(1," is bmp");
-						FStream->Write(&recvbuff[RspHdr.HdrLen],iResult-RspHdr.HdrLen);
-					  }
-
-					  // else save the buffer to a stream. Both exclude the header
-					  TStr->Write(&recvbuff[RspHdr.HdrLen],iResult-RspHdr.HdrLen);
 					  Report(RspHdr.HdrLen,"Total Bytes of header");
 				}
 				else
-				{      if (RspHdr.cType=="bmp")
-					   {
-						 FStream->Write(recvbuff,iResult);
-					   }
-					   TStr->Write(recvbuff,iResult);
+				{
+					   Content.SetBody(recvbuff,0,iResult);
 				}
 
 		}
@@ -166,17 +160,22 @@ bool ConnectIt()
 		closesocket(iSocket);
 		WSACleanup();
 	};
+
+// Show the body in the BodyEdt from TStr.
+Fm->BodyEdt->Text=Content.cBody;
+// Save the content or not according to the type of the content
+if (RspHdr.cType!=".html")
+{
+	filename = IntToStr(rand()) + RspHdr.cType;
+	Content.SaveToFile(filename);
+}
+
 // Close connection
 	msg = "The End";
 	Report(iResult,msg);
 	closesocket(iSocket);
 	WSACleanup();
-	FStream->Free();
-
-// Show the body in the BodyEdt from TStr.
-Fm->BodyEdt->Text = TStr->DataString;
-
-//--------------------------
+ //--------------------------
 
 return TRUE;
 }
@@ -184,7 +183,7 @@ return TRUE;
 
 void __fastcall TFm::Button1Click(TObject *Sender)
 {
-	if (RspHdr.cType=="bmp") {
+	if (RspHdr.cType!=".html") {
 	TImage* Image2 = new TImage(Fm);
 	Image2->Parent = Fm;
 	Image2->Width = 200;
@@ -197,6 +196,5 @@ void __fastcall TFm::Button1Click(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-// The global rsphdr catched the recvbuff.
 
 

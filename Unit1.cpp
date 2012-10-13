@@ -125,7 +125,10 @@ bool ConnectIt()
 
 				if (totalRecvBytes==iResult)
 				{
+					  // RspHdr get the buffer, calculate the length, create the header
 					  RspHdr.SetResponseHeader(recvbuff);
+					  // Content get the buffer, create the first part of content
+					  // Starting from the end of the header.
 					  Content.SetBody(recvbuff,RspHdr.HdrLen,iResult-RspHdr.HdrLen);
 
 					  Report(RspHdr.cSize," The lenth of the content is");
@@ -166,6 +169,7 @@ if (RspHdr.cType!=".html")
 	filename = IntToStr(rand()) + RspHdr.cType;
 	Content.SaveToFile(filename);
 }
+// !!!!!!!!!!!! TODO: Do sth. with the content  !!!!!!!!!!
 
 // Close connection
 	msg = "The End";
