@@ -10,11 +10,6 @@
 #include <FMX.Types.hpp>
 #include <FMX.Objects.hpp>
 
-struct cBodyStruct
-{
-	 cBodyStruct* next;
-};
-
 class HtmlBody
 {
 	public:
@@ -23,7 +18,6 @@ class HtmlBody
 		void SetBody(char*, int, int);
 		// Save the stream to file
 		void SaveToFile(UnicodeString fn);
-
 		// Here is the string created from the stream strstr
 		UnicodeString cBody;
 		// The length of the stream

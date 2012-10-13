@@ -3,7 +3,7 @@ object Fm: TFm
   Top = 0
   BorderStyle = bsSizeToolWin
   Caption = #33258#28982#12398#12502#12521#12454#12470
-  ClientHeight = 643
+  ClientHeight = 706
   ClientWidth = 809
   FormFactor.Width = 1366
   FormFactor.Height = 768
@@ -64,5 +64,31 @@ object Fm: TFm
     Text = 'Get Image'
     Width = 80.000000000000000000
     OnClick = Button1Click
+  end
+  object RspHdrEdt: TMemo
+    Touch.InteractiveGestures = [igPan]
+    Height = 129.000000000000000000
+    Position.X = 8.000000000000000000
+    Position.Y = 488.000000000000000000
+    Width = 553.000000000000000000
+    DisableFocusEffect = False
+    KeyboardType = vktDefault
+  end
+  object BtnConSz: TButton
+    DisableFocusEffect = False
+    Height = 22.000000000000000000
+    Position.X = 424.000000000000000000
+    Position.Y = 8.000000000000000000
+    Text = 'Get Content Size From Header'
+    Width = 185.000000000000000000
+  end
+  object BodyEdt: TMemo
+    Touch.InteractiveGestures = [igPan]
+    Height = 129.000000000000000000
+    Position.X = 584.000000000000000000
+    Position.Y = 488.000000000000000000
+    Width = 217.000000000000000000
+    DisableFocusEffect = False
+    KeyboardType = vktDefault
   end
 end
