@@ -4,16 +4,10 @@
 
 HtmlBody::HtmlBody() {
 StrStr = new TStringStream();
-bodySize = 0;
 }
 
 void HtmlBody::SetBody(char* buff, int startPos,int endPos) {
 StrStr->Write(&buff[startPos],endPos);
 cBody = StrStr->DataString;
-bodySize += endPos-startPos;
-}
-
-void HtmlBody::SaveToFile(UnicodeString fn){
-StrStr->SaveToFile(fn);
 }
 

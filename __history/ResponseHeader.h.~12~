@@ -30,7 +30,7 @@ class ResponseHeader
 		// The parameter of the Header
 		char* FstBuff;
 		int HdrLen;
-		// The parameter of header
+		// The parameter of contents
 		UnicodeString cType;
         UnicodeString cDate;
 		int cSize;

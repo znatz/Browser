@@ -3,7 +3,7 @@ object Fm: TFm
   Top = 0
   BorderStyle = bsSizeToolWin
   Caption = #33258#28982#12398#12502#12521#12454#12470
-  ClientHeight = 699
+  ClientHeight = 706
   ClientWidth = 809
   FormFactor.Width = 1366
   FormFactor.Height = 768

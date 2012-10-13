@@ -13,7 +13,3 @@ cBody = StrStr->DataString;
 bodySize += endPos-startPos;
 }
 
-void HtmlBody::SaveToFile(UnicodeString fn){
-StrStr->SaveToFile(fn);
-}
-

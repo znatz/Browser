@@ -6,6 +6,7 @@
 #include "Unit1.h"
 #include "RequestHeader.h"
 #include "ResponseHeader.h"
+#include "HtmlBody.h"
 //---------------------------------------------------------------------------
 #include <winsock2.h>
 #include <WS2tcpip.h>
@@ -22,14 +23,15 @@
 int  iResult;
 UnicodeString msg;
 UnicodeString filename;
-TFileStream* FStream;
-TStringStream* TStr = new TStringStream();
+/*
+	TFileStream* FStream;
+*/
 ResponseHeader RspHdr("");
+HtmlBody Content;
 
 bool ConnectIt();
 void Report(int, UnicodeString);
 void RspReport(int, UnicodeString);
-void __fastcall ExamRspHdr();
 
 //---------------------------------------------------------------------------
 TFm *Fm;
@@ -41,13 +43,16 @@ __fastcall TFm::TFm(TComponent* Owner)
 //---------------------------------------------------------------------------
 void __fastcall TFm::SbClick(TObject *Sender)
 {
-	Fm->Err->Text="";
-	Fm->RqstHdr->Text=="";
-	UnicodeString str = Input->Text;
+	Fm->Err->Text		=	"";
+	Fm->RqstHdr->Text	=	"";
+	Fm->Output->Text	=	"";
+	Fm->BodyEdt->Text	=	"";
+	Fm->Err->Text		=	"";
+	Fm->RspHdrEdt->Text	=	"";
+	UnicodeString str 	= 	Input->Text;
 
 	randomize();
-	filename = IntToStr(rand()) +".png";
-	FStream= new TFileStream(filename, fmCreate);
+
 
 	ConnectIt();
 }
@@ -125,20 +130,32 @@ bool ConnectIt()
 				if (totalRecvBytes==iResult)
 				{
 					  RspHdr.SetResponseHeader(recvbuff);
-					  ExamRspHdr();
-					  // If it is a bmp file, then save it to file.
-					  if (RspHdr.cType=="bmp")
-					  {
-					  FStream->Write(&recvbuff[RspHdr.HdrLen],iResult-RspHdr.HdrLen);
-					  }
+					  Report(RspHdr.cSize," The lenth of the content is");
+					  Report(1, " The date is " + RspHdr.cDate);
 
-					  // Also save the buffer to a stream.
-					  TStr->Write(&recvbuff[RspHdr.HdrLen],iResult-RspHdr.HdrLen);
-						Report(RspHdr.HdrLen,"TotalBytes");
+					  // If it is a bmp file, then save it to file.
+				                /*
+                    	  if (RspHdr.cType!=".html")
+                    					  {
+											Report(0,"Not an HTML ");
+
+                */
+						//FStream= new TFileStream(filename, fmCreate);
+						//FStream->Write(&recvbuff[RspHdr.HdrLen],iResult-RspHdr.HdrLen);
+					 // }
+
+					  // else save the buffer to a stream. Both exclude the header
+					  Content.SetBody(recvbuff,RspHdr.HdrLen,iResult-RspHdr.HdrLen);
+					  Report(RspHdr.HdrLen,"Total Bytes of header");
 				}
 				else
-				{
-					FStream->Write(recvbuff,iResult);
+				{                             /*
+                           if (RspHdr.cType!=".html")
+                           					   {
+                           						 //FStream->Write(recvbuff,iResult);
+											   }
+                       */
+					   Content.SetBody(recvbuff,0,iResult);
 				}
 
 		}
@@ -161,13 +178,17 @@ bool ConnectIt()
 		closesocket(iSocket);
 		WSACleanup();
 	};
+
+// Show the body in the BodyEdt from TStr.
+Fm->BodyEdt->Text=Content.cBody;
+filename = IntToStr(rand()) + RspHdr.cType;
+Content.StrStr->SaveToFile(filename);
 // Close connection
 	msg = "The End";
 	Report(iResult,msg);
 	closesocket(iSocket);
 	WSACleanup();
-	FStream->Free();
-
+ //	FStream->Free();
 
 
 //--------------------------
@@ -178,7 +199,7 @@ return TRUE;
 
 void __fastcall TFm::Button1Click(TObject *Sender)
 {
-	if (RspHdr.cType=="bmp") {
+	if (RspHdr.cType!=".html") {
 	TImage* Image2 = new TImage(Fm);
 	Image2->Parent = Fm;
 	Image2->Width = 200;
@@ -192,40 +213,5 @@ void __fastcall TFm::Button1Click(TObject *Sender)
 
 //---------------------------------------------------------------------------
 // The global rsphdr catched the recvbuff.
-void __fastcall TFm::BtnConSzClick(TObject *Sender)
-{
-	ExamRspHdr();
-}
-//---------------------------------------------------------------------------
-// The header is now examed before any further action.
-void __fastcall ExamRspHdr()
-{
-	node *q;
-	for(q=RspHdr.list;q->next!=NULL;q=q->next)
-	{
-		RspReport(1,q->pAttrib + " IS " + q->vAttrib);
-		// The length is found and casting to INT.
-		if (q->pAttrib=="Content-Length")
-		{
-			RspHdr.cSize = q->vAttrib.ToInt();
-			Report(RspHdr.cSize," The lenth of the content is");
-		}
-		// The date is founnd.
-		else if (q->pAttrib=="Date")
-		{
-			Report(0, "Date found at " + q->vAttrib);
-		}
-		// Check if it is a bmp file
-		else if (q->pAttrib=="Content-Type")
-		{
-			UnicodeString ustr = "image/bmp";
-			if(q->vAttrib==ustr)
-			{
-				RspHdr.cType="bmp";
-				Report(0,"Type"+RspHdr.cType);
-			}
-		}
-	}
-}
-//---------------------------------------------------------------------------
+
 

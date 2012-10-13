@@ -1,5 +1,5 @@
-#ifndef ResponseHeaderH
-#define ResponseHeaderH
+#ifndef HtmlBodyH
+#define HtmlBodyH
 
 #include <System.Classes.hpp>
 #include <FMX.Controls.hpp>
@@ -10,15 +10,14 @@
 #include <FMX.Types.hpp>
 #include <FMX.Objects.hpp>
 
-class ResponseHeader {
+class HtmlBody {
 
 public:
-	char* FstBuff;
-	int HdrLen;
-
-	ResponseHeader(char*);
-
-
+	HtmlBody();
+	void SetBody(char*, int, int);
+	void SaveToFile(UnicodeString fn);
+	UnicodeString cBody;
+	int bodySize;
+	TStringStream* StrStr;
 };
-
-#endif /* #ifndef ResponseHeaderH */
+#endif /* #ifndef Class1H */

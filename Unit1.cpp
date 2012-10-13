@@ -23,7 +23,6 @@
 int  iResult;
 UnicodeString msg;
 UnicodeString filename;
-TFileStream* FStream;
 ResponseHeader RspHdr("");
 HtmlBody Content;
 
@@ -42,7 +41,6 @@ __fastcall TFm::TFm(TComponent* Owner)
 void __fastcall TFm::SbClick(TObject *Sender)
 {
 	Fm->Err->Text		=	"";
-	Fm->RqstHdr->Text	=	"";
 	Fm->Output->Text	=	"";
 	Fm->BodyEdt->Text	=	"";
 	Fm->Err->Text		=	"";
@@ -128,27 +126,14 @@ bool ConnectIt()
 				if (totalRecvBytes==iResult)
 				{
 					  RspHdr.SetResponseHeader(recvbuff);
+					  Content.SetBody(recvbuff,RspHdr.HdrLen,iResult-RspHdr.HdrLen);
+
 					  Report(RspHdr.cSize," The lenth of the content is");
 					  Report(1, " The date is " + RspHdr.cDate);
-
-					  // If it is a bmp file, then save it to file.
-					  if (RspHdr.cType!=".html")
-					  {
-						Report(0,"Not an HTML ");
-						filename = IntToStr(rand()) + RspHdr.cType;
-						FStream= new TFileStream(filename, fmCreate);
-						FStream->Write(&recvbuff[RspHdr.HdrLen],iResult-RspHdr.HdrLen);
-					  }
-
-					  // else save the buffer to a stream. Both exclude the header
-					  Content.SetBody(recvbuff,RspHdr.HdrLen,iResult-RspHdr.HdrLen);
 					  Report(RspHdr.HdrLen,"Total Bytes of header");
 				}
 				else
-				{      if (RspHdr.cType!=".html")
-					   {
-						 FStream->Write(recvbuff,iResult);
-					   }
+				{
 					   Content.SetBody(recvbuff,0,iResult);
 				}
 
@@ -172,16 +157,22 @@ bool ConnectIt()
 		closesocket(iSocket);
 		WSACleanup();
 	};
+
+// Show the body in the BodyEdt from TStr.
+Fm->BodyEdt->Text=Content.cBody;
+// Save the content or not according to the type of the content
+if (RspHdr.cType!=".html")
+{
+	filename = IntToStr(rand()) + RspHdr.cType;
+	Content.SaveToFile(filename);
+}
+
 // Close connection
 	msg = "The End";
 	Report(iResult,msg);
 	closesocket(iSocket);
 	WSACleanup();
-	FStream->Free();
-
-// Show the body in the BodyEdt from TStr.
-Fm->BodyEdt->Text=Content.cBody;
-//--------------------------
+ //--------------------------
 
 return TRUE;
 }
@@ -202,6 +193,5 @@ void __fastcall TFm::Button1Click(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-// The global rsphdr catched the recvbuff.
 
 

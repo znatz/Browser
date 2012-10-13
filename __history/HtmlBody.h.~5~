@@ -15,10 +15,8 @@ class HtmlBody {
 public:
 	HtmlBody();
 	void SetBody(char*, int, int);
-	void SaveToFile(UnicodeString fn);
 	UnicodeString cBody;
 	int bodySize;
-private:
 	TStringStream* StrStr;
 };
 #endif /* #ifndef Class1H */
